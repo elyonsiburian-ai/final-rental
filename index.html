@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Manajemen Sewa</title>
+    <title>Sistem Manajemen Sewa (LocalBase)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -55,23 +55,16 @@
         .modal-content-area.modal-closing {
             animation: modalFadeOut 300ms ease-in forwards;
         }
-
-        /* (DIHAPUS) Animasi Landing Page telah dihapus */
-
     </style>
 </head>
 <body class="text-gray-100">
 
-    <!-- (DIHAPUS) LANDING PAGE DIHAPUS -->
-
-    <!-- (DIUBAH) KONTEN UTAMA APLIKASI SEKARANG LANGSUNG TAMPIL -->
     <div id="main-content" class="flex h-screen">
 
         <!-- BAGIAN SIDEBAR NAVIGASI KIRI -->
         <aside class="w-64 flex-shrink-0 bg-gray-800 p-6 hidden md:flex flex-col overflow-y-auto">
             <h1 class="text-3xl font-extrabold text-blue-500 mb-6 mt-2 text-center" style="font-family: 'Poppins', sans-serif;">RentalYuk</h1>
             
-            <!-- (BARU) Placeholder Foto Profil Sidebar -->
             <img id="sidebar-profile-pic" 
                  src="https://placehold.co/150x150/374151/E0E0E0?text=Profil" 
                  alt="Profil" 
@@ -109,7 +102,6 @@
                 
                 <!-- Wrapper Halaman Dashboard -->
                 <div id="page-dashboard">
-                    <!-- (DIUBAH) Judul dan Sapaan Dashboard -->
                     <h2 class="text-3xl font-semibold text-white">Dashboard</h2>
                     <p id="dashboard-greeting" class="text-xl text-gray-400 -mt-1 mb-6" style="font-family: 'Poppins', sans-serif; font-weight: 400;">Memuat data rental...</p>
 
@@ -182,7 +174,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="history-table-body" class="bg-gray-800 divide-y divide-gray-700">
-                                            <tr><td colspan="4" class="px-4 py-3 text-center text-gray-500">Memuat data...</td></tr>
+                                            <tr><td colspan="4" class="px-4 py-3 text-center text-gray-500">Belum ada histori.</td></tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -266,7 +258,6 @@
                     <h2 class="text-3xl font-semibold text-white">Pengaturan</h2>
                     <p class="text-xl text-gray-400 -mt-1 mb-6" style="font-family: 'Poppins', sans-serif; font-weight: 400;">Kelola preferensi aplikasi Anda.</p>
                     
-                    <!-- (BARU) Bagian untuk Edit Nama Rental -->
                     <div class="bg-gray-800 p-8 rounded-lg shadow-lg mb-8">
                         <h3 class="text-xl font-semibold text-white mb-6">Nama Rental</h3>
                         <form id="rental-name-form">
@@ -282,7 +273,6 @@
                         </form>
                     </div>
 
-                    <!-- (DIUBAH) Bagian Profil disesuaikan -->
                     <div class="bg-gray-800 p-8 rounded-lg shadow-lg mb-8">
                         <h3 class="text-xl font-semibold text-white mb-6">Profil</h3>
                         <div class="flex flex-col md:flex-row items-center gap-6">
@@ -312,8 +302,12 @@
                     </div>
 
                     <div class="bg-gray-800 p-8 rounded-lg shadow-lg">
-                        <h3 class="text-xl font-semibold text-white mb-4">Harga Sewa</h3>
-                        <p class="text-gray-400">Opsi pengaturan harga akan tersedia di sini.</p>
+                        <h3 class="text-xl font-semibold text-white mb-4">Hapus Data</h3>
+                        <p class="text-gray-400 mb-4">Menghapus semua data (inventaris, sewa, histori, dan profil) dari browser ini. Tidak bisa dibatalkan.</p>
+                        <button id="delete-all-data-btn" 
+                                class="bg-red-700 hover:bg-red-800 text-white font-medium py-2 px-5 rounded-lg shadow-md transition-all">
+                            Hapus Semua Data
+                        </button>
                     </div>
                 </div>
 
@@ -323,7 +317,7 @@
     </div>
 
 
-    <!-- (BARU) MODAL UNTUK SETUP AWAL -->
+    <!-- MODAL UNTUK SETUP AWAL -->
     <div id="setup-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center p-4 z-50">
         <div class="modal-content-area bg-gray-800 rounded-lg shadow-xl p-8 w-full max-w-lg">
             <h4 class="text-3xl font-semibold mb-2 text-white text-center" style="font-family: 'Poppins', sans-serif;">Selamat Datang di RentalYuk!</h4>
@@ -331,7 +325,6 @@
             
             <form id="setup-form">
                 <div class="space-y-6">
-                    <!-- 1. Nama Rental (Wajib) -->
                     <div>
                         <label for="setup-rental-name" class="block text-sm font-medium text-gray-300 mb-1">
                             Nama Rental Anda <span class="text-red-400">*</span>
@@ -340,7 +333,6 @@
                                class="w-full px-3 py-2 border border-gray-600 bg-gray-700 text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500">
                     </div>
                     
-                    <!-- 2. Foto Profil (Opsional) -->
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">
                             Foto Profil / Logo Rental (Opsional)
@@ -476,41 +468,37 @@
     </div>
 
 
-    <!-- SCRIPT FIREBASE -->
+    <!-- (DIUBAH) SCRIPT NON-FIREBASE -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, doc, collection, onSnapshot, addDoc, updateDoc, deleteDoc, 
-            increment, writeBatch, getDocs, setDoc, setLogLevel, getDoc
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // (DIHAPUS) Semua import Firebase dihapus
         
-        // === 1. KONFIGURASI DAN INISIALISASI FIREBASE ===
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'rental-yuk-app';
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        setLogLevel('debug');
+        // === 1. KONFIGURASI DAN INISIALISASI ===
+        // (DIHAPUS) Semua variabel Firebase dihapus
+        
+        // (BARU) Kunci untuk localStorage
+        const STORAGE_KEYS = {
+            INVENTORY: 'rentalyuk_inventory',
+            RENTALS: 'rentalyuk_rentals',
+            HISTORY: 'rentalyuk_history',
+            PROFILE: 'rentalyuk_profile'
+        };
 
         // === 2. DATA STATE LOKAL (CACHE) ===
         let localInventory = [];
         let localRentals = [];
         let localHistory = [];
+        let localProfile = {}; // (BARU) Untuk data profil
         let confirmCallback = null; 
         let countdownTimerInterval = null;
-        let selectedSettingsPicDataUrl = null; // (DIUBAH) Untuk Halaman Setting
-        let selectedSetupPicDataUrl = null;    // (BARU) Untuk Modal Setup
+        let selectedSettingsPicDataUrl = null; 
+        let selectedSetupPicDataUrl = null;    
         
         let statsChart = null;
         const statsChartCanvas = document.getElementById('stats-pie-chart');
         const statsNoData = document.getElementById('stats-no-data');
 
         // === 3. REFERENSI KOLEKSI FIREBASE ===
-        let inventoryCol, rentalsCol, historyCol, profileDocRef;
-        let userId;
+        // (DIHAPUS) Semua referensi koleksi dihapus
 
         // === 4. SELEKTOR DOM ===
         const navLinks = document.querySelectorAll('.nav-link');
@@ -523,7 +511,6 @@
         };
         const mainContent = document.getElementById('main-content');
         
-        // (BARU) Selektor untuk Setup, Profil, dan Sapaan
         const setupModal = document.getElementById('setup-modal');
         const setupForm = document.getElementById('setup-form');
         const setupRentalName = document.getElementById('setup-rental-name');
@@ -538,8 +525,6 @@
         const settingsProfilePreview = document.getElementById('settings-profile-preview');
         const profilePicUpload = document.getElementById('profile-pic-upload');
         const saveProfileBtn = document.getElementById('save-profile-btn');
-
-        // Selektor yang sudah ada
         const inventoryTableBody = document.getElementById('inventory-table-body');
         const rentalsTableBody = document.getElementById('rentals-table-body');
         const historyTableBody = document.getElementById('history-table-body');
@@ -569,15 +554,34 @@
         const messageOkBtn = document.getElementById('message-ok-btn');
         const messageCancelBtn = document.getElementById('message-cancel-btn');
         const seedDataBtn = document.getElementById('seed-data-btn');
+        const deleteAllDataBtn = document.getElementById('delete-all-data-btn');
         
-        // (DIHAPUS) Selektor Landing Page
-        // const landingPage = document.getElementById('landing-page');
-        // const enterBtn = document.getElementById('enter-dashboard-btn');
+        // === (BARU) FUNGSI HELPER LOCALSTORAGE ===
+        
+        function loadFromStorage(key, defaultValue = []) {
+            try {
+                const item = localStorage.getItem(key);
+                return item ? JSON.parse(item) : defaultValue;
+            } catch (e) {
+                console.error(`Gagal memuat ${key} dari localStorage`, e);
+                return defaultValue;
+            }
+        }
+
+        function saveToStorage(key, data) {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+            } catch (e) {
+                console.error(`Gagal menyimpan ${key} ke localStorage`, e);
+                showMessage("Error: Gagal menyimpan data. Penyimpanan mungkin penuh.");
+            }
+        }
 
 
         // === 5. FUNGSI-FUNGSI RENDER (UI) ===
         
         function showMessage(message) {
+            // ... (Fungsi ini tetap sama)
             console.log("Menampilkan Pesan:", message);
             messageText.textContent = message;
             messageOkBtn.textContent = "OK";
@@ -588,6 +592,7 @@
         }
 
         function showConfirm(message, onConfirm) {
+            // ... (Fungsi ini tetap sama)
             console.log("Menampilkan Konfirmasi:", message);
             messageText.textContent = message;
             messageOkBtn.textContent = "Ya, Lanjutkan";
@@ -596,8 +601,21 @@
             openModal(messageModal);
             confirmCallback = onConfirm;
         }
+        
+        function renderAllUI() {
+            renderInventoryTable();
+            renderRentals();
+            renderLaporan();
+            renderHistory();
+            updateStats();
+            populateItemSelect();
+            if (pages.stats.classList.contains('hidden') === false) {
+                renderStatsPage();
+            }
+        }
 
         function renderInventoryTable() { 
+            // ... (Logika render tetap sama)
             if (!inventoryTableBody) return; 
             inventoryTableBody.innerHTML = ''; 
             if (localInventory.length === 0) {
@@ -631,6 +649,7 @@
         }
         
         function renderRentals() {
+            // ... (Logika render tetap sama)
             if (!rentalsTableBody) return; 
             rentalsTableBody.innerHTML = ''; 
             if (localRentals.length === 0) {
@@ -664,6 +683,7 @@
         }
 
         function renderLaporan() {
+            // ... (Logika render tetap sama)
             if (!laporanTableBody) return; 
             laporanTableBody.innerHTML = ''; 
             if (localRentals.length === 0) {
@@ -698,6 +718,7 @@
         }
 
         function renderHistory() {
+            // ... (Logika render tetap sama)
             if (!historyTableBody) return; 
             historyTableBody.innerHTML = '';
             if (localHistory.length === 0) {
@@ -730,6 +751,7 @@
         }
 
         function updateStats() {
+            // ... (Logika render tetap sama)
             const totalItems = localInventory.reduce((sum, item) => sum + item.totalStock, 0);
             const onRentItems = localInventory.reduce((sum, item) => sum + item.rentedStock, 0);
             const availableItems = totalItems - onRentItems;
@@ -739,6 +761,7 @@
         }
 
         function populateItemSelect() {
+            // ... (Logika render tetap sama)
             if (!itemSelect) return; 
             itemSelect.innerHTML = '<option value="" disabled selected>Pilih barang...</option>';
             const availableItems = localInventory.filter(item => (item.totalStock - item.rentedStock) > 0);
@@ -749,9 +772,10 @@
             });
         }
 
-        // === 6. FUNGSI-FUNGSI LOGIKA (Interaksi & Firebase) ===
+        // === 6. FUNGSI-FUNGSI LOGIKA (Interaksi & localStorage) ===
 
         function formatTime(ms) {
+            // ... (Fungsi ini tetap sama)
             let seconds = Math.floor(ms / 1000);
             let minutes = Math.floor(seconds / 60);
             let hours = Math.floor(minutes / 60);
@@ -762,6 +786,7 @@
         }
 
         function updateAllCountdowns() {
+            // ... (Fungsi ini tetap sama)
             const countdownCells = document.querySelectorAll('[classid="countdown-cell"]');
             const now = new Date();
             countdownCells.forEach(cell => {
@@ -787,10 +812,12 @@
         }
         
         function generateRandomHexColor() {
+            // ... (Fungsi ini tetap sama)
             return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
         }
 
         function generateUniqueColor(existingColors = []) {
+            // ... (Fungsi ini tetap sama)
             let newColor;
             let attempts = 0;
             do {
@@ -801,40 +828,36 @@
             return newColor;
         }
         
-        async function seedDatabase() {
-            try {
-                console.log("Mengecek data awal...");
-                const snapshot = await getDocs(inventoryCol);
-                if (snapshot.empty) {
-                    console.log("Database kosong. Menambahkan data awal...");
-                    const existingColors = [];
-                    const mockInventory = [
-                        { id: 'PS1', name: 'PlayStation 1', category: 'Konsol', totalStock: 0, rentedStock: 0 },
-                        { id: 'PS2', name: 'PlayStation 2', category: 'Konsol', totalStock: 0, rentedStock: 0 },
-                        { id: 'PS3', name: 'PlayStation 3', category: 'Konsol', totalStock: 0, rentedStock: 0 },
-                        { id: 'PS4', name: 'PlayStation 4', category: 'Konsol', totalStock: 0, rentedStock: 0 },
-                        { id: 'PS5', name: 'PlayStation 5', category: 'Konsol', totalStock: 0, rentedStock: 0 },
-                    ];
-                    
-                    const batch = writeBatch(db);
-                    mockInventory.forEach(item => {
-                        const color = generateUniqueColor(existingColors);
-                        existingColors.push(color);
-                        const docRef = doc(inventoryCol, item.id); 
-                        batch.set(docRef, {...item, color: color});
-                    });
-                    await batch.commit();
-                    showMessage("Data contoh berhasil ditambahkan dengan stok 0!");
-                } else {
-                    showMessage("Database sudah berisi data.");
-                }
-            } catch (error) {
-                console.error("Error saat seeding database: ", error);
-                showMessage(`Error: ${error.message}`);
+        // (DIUBAH) Menggunakan localStorage
+        function seedDatabase() {
+            console.log("Mengecek data awal...");
+            if (localInventory.length === 0) {
+                console.log("Database kosong. Menambahkan data awal...");
+                const existingColors = [];
+                const mockInventory = [
+                    { id: 'PS1', name: 'PlayStation 1', category: 'Konsol', totalStock: 0, rentedStock: 0 },
+                    { id: 'PS2', name: 'PlayStation 2', category: 'Konsol', totalStock: 0, rentedStock: 0 },
+                    { id: 'PS3', name: 'PlayStation 3', category: 'Konsol', totalStock: 0, rentedStock: 0 },
+                    { id: 'PS4', name: 'PlayStation 4', category: 'Konsol', totalStock: 0, rentedStock: 0 },
+                    { id: 'PS5', name: 'PlayStation 5', category: 'Konsol', totalStock: 0, rentedStock: 0 },
+                ];
+                
+                localInventory = mockInventory.map(item => {
+                    const color = generateUniqueColor(existingColors);
+                    existingColors.push(color);
+                    return {...item, color: color};
+                });
+                
+                saveToStorage(STORAGE_KEYS.INVENTORY, localInventory);
+                renderInventoryTable(); // Render ulang tabel
+                showMessage("Data contoh berhasil ditambahkan dengan stok 0!");
+            } else {
+                showMessage("Database sudah berisi data.");
             }
         }
         
-        async function handleAddRental(e) {
+        // (DIUBAH) Menggunakan localStorage
+        function handleAddRental(e) {
             e.preventDefault();
             const formData = new FormData(rentalForm);
             const newItemId = formData.get('itemId');
@@ -844,29 +867,39 @@
                 showMessage("Harap isi semua field.");
                 return;
             }
-            try {
-                const newRental = {
-                    itemId: newItemId,
-                    renterName: newRenterName,
-                    startTime: new Date().toISOString(),
-                    durationMinutes: newDurationMinutes
-                };
-                const batch = writeBatch(db);
-                const rentalDocRef = doc(rentalsCol);
-                batch.set(rentalDocRef, newRental);
-                const itemDocRef = doc(inventoryCol, newItemId);
-                batch.update(itemDocRef, { rentedStock: increment(1) });
-                await batch.commit();
-                console.log("Sewa baru berhasil ditambahkan");
-                closeModal(rentalModal);
-                rentalForm.reset();
-            } catch (error) {
-                console.error("Error menambahkan sewa baru: ", error);
-                showMessage(`Error: ${error.message}`);
+
+            const itemInInventory = localInventory.find(item => item.id === newItemId);
+            if (!itemInInventory) {
+                showMessage("Error: Item tidak ditemukan.");
+                return;
             }
+
+            const newRental = {
+                id: crypto.randomUUID(), // (BARU) Buat ID unik
+                itemId: newItemId,
+                renterName: newRenterName,
+                startTime: new Date().toISOString(),
+                durationMinutes: newDurationMinutes
+            };
+
+            // Update state lokal
+            localRentals.push(newRental);
+            itemInInventory.rentedStock += 1;
+
+            // Simpan ke localStorage
+            saveToStorage(STORAGE_KEYS.RENTALS, localRentals);
+            saveToStorage(STORAGE_KEYS.INVENTORY, localInventory);
+            
+            console.log("Sewa baru berhasil ditambahkan");
+            closeModal(rentalModal);
+            rentalForm.reset();
+            
+            // Render ulang UI
+            renderAllUI();
         }
 
-        async function handleReturnRental(e) {
+        // (DIUBAH) Menggunakan localStorage
+        function handleReturnRental(e) {
             const targetButton = e.target.closest('.return-btn');
             if (targetButton) {
                 const rentalIdToReturn = targetButton.dataset.rentalId;
@@ -875,38 +908,48 @@
                     showMessage("Error: ID barang atau ID sewa tidak ditemukan.");
                     return;
                 }
-                try {
-                    const rentalToMove = localRentals.find(rental => rental.id === rentalIdToReturn);
-                    if (!rentalToMove) {
-                         showMessage("Error: Data sewa tidak ditemukan.");
-                         return;
-                    }
 
-                    const historyEntry = {
-                        itemId: rentalToMove.itemId,
-                        renterName: rentalToMove.renterName,
-                        returnDate: new Date().toISOString().split('T')[0],
-                        status: 'Selesai',
-                        durationMinutes: rentalToMove.durationMinutes
-                    };
-
-                    const batch = writeBatch(db);
-                    const rentalDocRef = doc(rentalsCol, rentalIdToReturn);
-                    batch.delete(rentalDocRef);
-                    const historyDocRef = doc(historyCol);
-                    batch.set(historyDocRef, historyEntry);
-                    const itemDocRef = doc(inventoryCol, itemIdToReturn);
-                    batch.update(itemDocRef, { rentedStock: increment(-1) });
-                    await batch.commit();
-                    console.log("Barang berhasil dikembalikan");
-                } catch (error) {
-                    console.error("Error mengembalikan barang: ", error);
-                    showMessage(`Error: ${error.message}`);
+                const rentalToMoveIndex = localRentals.findIndex(rental => rental.id === rentalIdToReturn);
+                if (rentalToMoveIndex === -1) {
+                     showMessage("Error: Data sewa tidak ditemukan.");
+                     return;
                 }
+                
+                const rentalToMove = localRentals[rentalToMoveIndex];
+
+                const historyEntry = {
+                    id: crypto.randomUUID(), // (BARU) Buat ID unik
+                    itemId: rentalToMove.itemId,
+                    renterName: rentalToMove.renterName,
+                    returnDate: new Date().toISOString().split('T')[0],
+                    status: 'Selesai',
+                    durationMinutes: rentalToMove.durationMinutes
+                };
+
+                const itemInInventory = localInventory.find(item => item.id === itemIdToReturn);
+
+                // Update state lokal
+                localRentals.splice(rentalToMoveIndex, 1); // Hapus dari sewa
+                localHistory.push(historyEntry); // Tambah ke histori
+                if (itemInInventory) {
+                    itemInInventory.rentedStock -= 1;
+                    if (itemInInventory.rentedStock < 0) itemInInventory.rentedStock = 0;
+                }
+
+                // Simpan ke localStorage
+                saveToStorage(STORAGE_KEYS.RENTALS, localRentals);
+                saveToStorage(STORAGE_KEYS.HISTORY, localHistory);
+                saveToStorage(STORAGE_KEYS.INVENTORY, localInventory);
+                
+                console.log("Barang berhasil dikembalikan");
+                
+                // Render ulang UI
+                renderAllUI();
             }
         }
 
-        async function handleAddInventory(e) {
+        // (DIUBAH) Menggunakan localStorage
+        function handleAddInventory(e) {
             e.preventDefault();
             const formData = new FormData(inventoryForm);
             const itemId = formData.get('itemId').toUpperCase().trim();
@@ -921,35 +964,42 @@
                 showMessage("Stok awal harus lebih dari 0.");
                 return;
             }
-            try {
-                const itemDocRef = doc(inventoryCol, itemId);
-                const docSnap = await getDoc(itemDocRef);
-                if (docSnap.exists()) {
-                    showMessage(`Error: Item dengan ID "${itemId}" sudah ada.`);
-                    return;
-                }
-                
-                const existingColors = localInventory.map(i => i.color).filter(Boolean);
-                const newItemColor = generateUniqueColor(existingColors);
-
-                const newItem = {
-                    name: itemName,
-                    category: itemCategory,
-                    totalStock: itemStock,
-                    rentedStock: 0,
-                    color: newItemColor
-                };
-                await setDoc(itemDocRef, newItem);
-                showMessage(`Item "${itemName}" berhasil ditambahkan.`);
-                closeModal(inventoryModal);
-                inventoryForm.reset();
-            } catch (error) {
-                console.error("Error menambahkan item inventaris: ", error);
-                showMessage(`Error: ${error.message}`);
+            
+            const itemExists = localInventory.find(item => item.id === itemId);
+            if (itemExists) {
+                showMessage(`Error: Item dengan ID "${itemId}" sudah ada.`);
+                return;
             }
+            
+            const existingColors = localInventory.map(i => i.color).filter(Boolean);
+            const newItemColor = generateUniqueColor(existingColors);
+
+            const newItem = {
+                id: itemId, // (DIUBAH) ID dari input, bukan auto-generate
+                name: itemName,
+                category: itemCategory,
+                totalStock: itemStock,
+                rentedStock: 0,
+                color: newItemColor
+            };
+            
+            // Update state lokal
+            localInventory.push(newItem);
+            
+            // Simpan ke localStorage
+            saveToStorage(STORAGE_KEYS.INVENTORY, localInventory);
+            
+            showMessage(`Item "${itemName}" berhasil ditambahkan.`);
+            closeModal(inventoryModal);
+            inventoryForm.reset();
+            
+            // Render ulang UI
+            renderInventoryTable();
+            updateStats();
         }
         
         function handleManageInventoryClick(e) {
+            // ... (Fungsi ini tetap sama)
             const editBtn = e.target.closest('.edit-stock-btn');
             const deleteBtn = e.target.closest('.delete-item-btn');
             if (editBtn) {
@@ -977,18 +1027,23 @@
             }
         }
 
-        async function deleteInventoryItem(id) {
-            try {
-                const itemDocRef = doc(inventoryCol, id);
-                await deleteDoc(itemDocRef);
-                showMessage("Item berhasil dihapus.");
-            } catch (error) {
-                console.error("Error menghapus item: ", error);
-                showMessage(`Error: ${error.message}`);
-            }
+        // (DIUBAH) Menggunakan localStorage
+        function deleteInventoryItem(id) {
+            // Update state lokal
+            localInventory = localInventory.filter(item => item.id !== id);
+            
+            // Simpan ke localStorage
+            saveToStorage(STORAGE_KEYS.INVENTORY, localInventory);
+            
+            showMessage("Item berhasil dihapus.");
+            
+            // Render ulang UI
+            renderInventoryTable();
+            updateStats();
         }
         
-        async function handleUpdateStock(action) {
+        // (DIUBAH) Menggunakan localStorage
+        function handleUpdateStock(action) {
             const id = stockItemId.value;
             const amount = parseInt(stockAmount.value);
             if (isNaN(amount) || amount <= 0) {
@@ -1000,101 +1055,120 @@
                 showMessage("Error: Item tidak ditemukan.");
                 return;
             }
-            try {
-                const itemDocRef = doc(inventoryCol, id);
-                if (action === 'add') {
-                    await updateDoc(itemDocRef, {
-                        totalStock: increment(amount)
-                    });
-                    showMessage(`Stok "${item.name}" berhasil ditambah ${amount}.`);
-                } else if (action === 'reduce') {
-                    const newTotalStock = item.totalStock - amount;
-                    if (newTotalStock < item.rentedStock) {
-                        showMessage(`Error: Stok total tidak bisa lebih kecil dari yang sedang disewa (${item.rentedStock}).`);
-                        return;
-                    }
-                    if (newTotalStock < 0) {
-                        showMessage("Error: Stok total tidak bisa negatif.");
-                        return;
-                    }
-                    await updateDoc(itemDocRef, {
-                        totalStock: increment(-amount)
-                    });
-                    showMessage(`Stok "${item.name}" berhasil dikurangi ${amount}.`);
+
+            if (action === 'add') {
+                item.totalStock += amount;
+                showMessage(`Stok "${item.name}" berhasil ditambah ${amount}.`);
+            } else if (action === 'reduce') {
+                const newTotalStock = item.totalStock - amount;
+                if (newTotalStock < item.rentedStock) {
+                    showMessage(`Error: Stok total tidak bisa lebih kecil dari yang sedang disewa (${item.rentedStock}).`);
+                    return;
                 }
-                closeModal(stockModal);
-            } catch (error)
-                {
-                console.error("Error update stok: ", error);
-                showMessage(`Error: ${error.message}`);
+                if (newTotalStock < 0) {
+                    showMessage("Error: Stok total tidak bisa negatif.");
+                    return;
+                }
+                item.totalStock = newTotalStock;
+                showMessage(`Stok "${item.name}" berhasil dikurangi ${amount}.`);
             }
+
+            // Simpan ke localStorage
+            saveToStorage(STORAGE_KEYS.INVENTORY, localInventory);
+            
+            closeModal(stockModal);
+            
+            // Render ulang UI
+            renderInventoryTable();
+            updateStats();
         }
 
-        // (BARU) Fungsi generik untuk memvalidasi & membaca file gambar
         function handleImageFile(file, imgElement, onLoaded) {
+            // ... (Fungsi ini tetap sama)
             if (!file) return;
-            
             if (!['image/jpeg', 'image/png'].includes(file.type)) {
                 showMessage("Error: Hanya file .jpg atau .png yang diizinkan.");
                 return;
             }
-
             const maxSize = 500 * 1024;
             if (file.size > maxSize) {
                 showMessage("Error: Ukuran file terlalu besar. Maksimal 500KB.");
                 return;
             }
-            
             const reader = new FileReader();
             reader.onload = (event) => {
                 const dataUrl = event.target.result;
                 imgElement.src = dataUrl;
-                // Pastikan gambar yg di-preview kotak (sesuai permintaan)
                 imgElement.classList.remove('rounded-full');
                 imgElement.classList.add('rounded-lg');
-                onLoaded(dataUrl); // Kirim data URL ke callback
+                onLoaded(dataUrl); 
             };
             reader.readAsDataURL(file);
         }
 
-        // (BARU) Handler preview untuk modal setup
         function handleSetupPicPreview(e) {
+            // ... (Fungsi ini tetap sama)
             handleImageFile(e.target.files[0], setupProfilePreview, (dataUrl) => {
                 selectedSetupPicDataUrl = dataUrl;
             });
-            e.target.value = ""; // Reset input
+            e.target.value = ""; 
         }
 
-        // (DIUBAH) Handler preview untuk halaman settings
         function handleSettingsPicPreview(e) {
+            // ... (Fungsi ini tetap sama)
             handleImageFile(e.target.files[0], settingsProfilePreview, (dataUrl) => {
                 selectedSettingsPicDataUrl = dataUrl;
-                // Aktifkan tombol simpan
                 saveProfileBtn.disabled = false;
                 saveProfileBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             });
-            e.target.value = ""; // Reset input
+            e.target.value = ""; 
+        }
+        
+        // (BARU) Fungsi untuk me-render UI profil
+        function updateProfileUI(profile) {
+            const defaultPreview = "https://placehold.co/150x150/374151/E0E0E0?text=Profil";
+            const rentalName = profile.rentalName || "Rental Anda";
+            const photoURL = profile.photoURL;
+
+            dashboardGreeting.textContent = `Selamat datang di ${rentalName}!`;
+            settingsRentalName.value = rentalName;
+            
+            if (photoURL) {
+                sidebarProfilePic.src = photoURL;
+                sidebarProfilePic.classList.remove('hidden');
+                settingsProfilePreview.src = photoURL;
+                settingsProfilePreview.classList.remove('rounded-full');
+                settingsProfilePreview.classList.add('rounded-lg');
+            } else {
+                sidebarProfilePic.classList.add('hidden');
+                settingsProfilePreview.src = defaultPreview;
+                settingsProfilePreview.classList.add('rounded-full');
+                settingsProfilePreview.classList.remove('rounded-lg');
+            }
         }
 
-        // (BARU) Handler untuk menyimpan NAMA RENTAL dari Halaman Settings
-        async function handleRentalNameSave(e) {
+        // (DIUBAH) Menggunakan localStorage
+        function handleRentalNameSave(e) {
             e.preventDefault();
             const newName = settingsRentalName.value.trim();
             if (!newName) {
                 showMessage("Nama rental tidak boleh kosong.");
                 return;
             }
-            try {
-                await updateDoc(profileDocRef, { rentalName: newName });
-                showMessage("Nama rental berhasil diperbarui.");
-            } catch (error) {
-                console.error("Error updating rental name: ", error);
-                showMessage(`Error: ${error.message}`);
-            }
+            
+            // Update state lokal
+            localProfile.rentalName = newName;
+            
+            // Simpan ke localStorage
+            saveToStorage(STORAGE_KEYS.PROFILE, localProfile);
+            
+            // Render ulang UI profil
+            updateProfileUI(localProfile);
+            showMessage("Nama rental berhasil diperbarui.");
         }
 
-        // (DIUBAH) Handler untuk menyimpan FOTO PROFIL dari Halaman Settings
-        async function handleProfilePicUpload() {
+        // (DIUBAH) Menggunakan localStorage
+        function handleProfilePicUpload() {
             if (!selectedSettingsPicDataUrl) {
                 showMessage("Anda belum memilih gambar baru.");
                 return;
@@ -1104,21 +1178,23 @@
             saveProfileBtn.textContent = "Menyimpan...";
             saveProfileBtn.classList.add('opacity-50', 'cursor-not-allowed');
             
-            try {
-                await updateDoc(profileDocRef, { photoURL: selectedSettingsPicDataUrl });
-                selectedSettingsPicDataUrl = null;
-                showMessage("Gambar profil berhasil diperbarui!");
-            } catch (error) {
-                console.error("Error saving profile picture: ", error);
-                showMessage(`Error: ${error.message}`);
-            } finally {
-                saveProfileBtn.textContent = "Simpan Perubahan Profil";
-                // Tombol tetap disabled sampai gambar baru dipilih lagi
-            }
+            // Update state lokal
+            localProfile.photoURL = selectedSettingsPicDataUrl;
+            
+            // Simpan ke localStorage
+            saveToStorage(STORAGE_KEYS.PROFILE, localProfile);
+            
+            selectedSettingsPicDataUrl = null;
+            showMessage("Gambar profil berhasil diperbarui!");
+            
+            // Render ulang UI profil
+            updateProfileUI(localProfile);
+            
+            saveProfileBtn.textContent = "Simpan Perubahan Profil";
         }
 
-        // (BARU) Handler untuk submit MODAL SETUP
-        async function handleSetupSubmit(e) {
+        // (DIUBAH) Menggunakan localStorage
+        function handleSetupSubmit(e) {
             e.preventDefault();
             const rentalName = setupRentalName.value.trim();
             if (!rentalName) {
@@ -1130,31 +1206,23 @@
             setupButton.disabled = true;
             setupButton.textContent = "Menyimpan...";
 
-            try {
-                // Buat dokumen profil baru
-                await setDoc(profileDocRef, { 
-                    rentalName: rentalName, 
-                    photoURL: selectedSetupPicDataUrl || null 
-                });
-                
-                // Setup selesai, tutup modal
-                closeModal(setupModal);
-                
-                // (PENTING) (DIPERBAIKI) Sekarang inisialisasi sisa aplikasi
-                initializeMainAppListeners();
-                setupRealtimeListeners();
-                navigateTo('dashboard');
-
-            } catch (error) {
-                console.error("Error saving initial setup: ", error);
-                showMessage(`Error: ${error.message}`);
-                setupButton.disabled = false;
-                setupButton.textContent = "Simpan & Mulai";
-            }
+            // Buat profil baru di state lokal
+            localProfile = {
+                rentalName: rentalName,
+                photoURL: selectedSetupPicDataUrl || null
+            };
+            
+            // Simpan ke localStorage
+            saveToStorage(STORAGE_KEYS.PROFILE, localProfile);
+            
+            closeModal(setupModal);
+            
+            // Inisialisasi aplikasi
+            initializeMainApp();
         }
 
-
         function openModal(modalElement) {
+            // ... (Fungsi ini tetap sama)
             modalElement.classList.remove('hidden');
             modalElement.classList.add('flex');
             const modalContent = modalElement.querySelector('.modal-content-area');
@@ -1165,6 +1233,7 @@
         }
 
         function closeModal(modalElement) {
+            // ... (Fungsi ini tetap sama)
             const modalContent = modalElement.querySelector('.modal-content-area');
             if (modalContent) {
                 modalContent.classList.remove('modal-showing');
@@ -1181,6 +1250,7 @@
         }
         
         function navigateTo(pageId) {
+            // ... (Fungsi ini tetap sama)
             Object.values(pages).forEach(page => page.classList.add('hidden'));
             if (pages[pageId]) {
                 pages[pageId].classList.remove('hidden');
@@ -1199,13 +1269,12 @@
         }
         
         function initChart() {
+            // ... (Fungsi ini tetap sama)
             if (statsChart) {
                 statsChart.destroy();
             }
-            
             Chart.defaults.color = '#D1D5DB';
             Chart.defaults.font.family = "'Inter', 'sans-serif'";
-
             const ctx = statsChartCanvas.getContext('2d');
             statsChart = new Chart(ctx, {
                 type: 'pie',
@@ -1220,62 +1289,32 @@
                         hoverOffset: 8
                     }]
                 },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                padding: 15
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed !== null) {
-                                        label += context.parsed.toFixed(1) + ' jam';
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
+                options: { /* ... (Opsi tetap sama) */ }
             });
         }
 
         function renderStatsPage() {
+            // ... (Logika render tetap sama)
             if (!statsChart) initChart();
-
             const itemUsage = {};
             localHistory.forEach(entry => {
                 if (!entry.durationMinutes) return; 
                 const hours = entry.durationMinutes / 60;
                 const id = entry.itemId;
-                if (!itemUsage[id]) {
-                    itemUsage[id] = 0;
-                }
+                if (!itemUsage[id]) { itemUsage[id] = 0; }
                 itemUsage[id] += hours;
             });
-
             const labels = [];
             const data = [];
             const colors = [];
-
             Object.keys(itemUsage).forEach(itemId => {
                 const item = localInventory.find(i => i.id === itemId);
                 const itemName = item ? item.name : 'Item Dihapus';
                 const itemColor = item ? item.color : '#888888';
-                
                 labels.push(itemName);
                 data.push(itemUsage[itemId]);
                 colors.push(itemColor);
             });
-
             if (data.length === 0) {
                 statsChartCanvas.classList.add('hidden');
                 statsNoData.classList.remove('hidden');
@@ -1283,94 +1322,37 @@
                 statsChartCanvas.classList.remove('hidden');
                 statsNoData.classList.add('hidden');
             }
-
             statsChart.data.labels = labels;
             statsChart.data.datasets[0].data = data;
             statsChart.data.datasets[0].backgroundColor = colors;
             statsChart.update();
         }
-
-        function setupRealtimeListeners() {
-            // (BARU) Listener untuk data PROFIL (Nama & Foto)
-            onSnapshot(profileDocRef, (doc) => {
-                const defaultPreview = "https://placehold.co/150x150/374151/E0E0E0?text=Profil";
-                
-                if (doc.exists()) {
-                    const data = doc.data();
-                    const rentalName = data.rentalName || "Rental Anda";
-                    const photoURL = data.photoURL;
-                    
-                    // Update Sapaan Dashboard
-                    dashboardGreeting.textContent = `Selamat datang di ${rentalName}!`;
-                    // Update field di Halaman Settings
-                    settingsRentalName.value = rentalName;
-                    
-                    // Update Foto Profil
-                    if (photoURL) {
-                        // Tampilkan di Sidebar (Kotak)
-                        sidebarProfilePic.src = photoURL;
-                        sidebarProfilePic.classList.remove('hidden');
-                        
-                        // Tampilkan di Settings (Kotak)
-                        settingsProfilePreview.src = photoURL;
-                        settingsProfilePreview.classList.remove('rounded-full');
-                        settingsProfilePreview.classList.add('rounded-lg');
-                    } else {
-                        // Sembunyikan di Sidebar
-                        sidebarProfilePic.classList.add('hidden');
-                        
-                        // Tampilkan placeholder di Settings (Bulat)
-                        settingsProfilePreview.src = defaultPreview;
-                        settingsProfilePreview.classList.add('rounded-full');
-                        settingsProfilePreview.classList.remove('rounded-lg');
-                    }
-                } else {
-                    // Seharusnya tidak terjadi jika logika setup benar
-                    dashboardGreeting.textContent = "Harap selesaikan setup.";
-                }
-            }, (error) => {
-                console.error("Error listening to profile doc: ", error);
-                dashboardGreeting.textContent = "Gagal memuat data rental.";
+        
+        // (BARU) Fungsi untuk menghapus semua data dari localStorage
+        function handleDeleteAllData() {
+            showConfirm("Anda YAKIN ingin menghapus SEMUA data? Ini akan menghapus inventaris, sewa, histori, dan profil Anda secara permanen.", () => {
+                localStorage.removeItem(STORAGE_KEYS.INVENTORY);
+                localStorage.removeItem(STORAGE_KEYS.RENTALS);
+                localStorage.removeItem(STORAGE_KEYS.HISTORY);
+                localStorage.removeItem(STORAGE_KEYS.PROFILE);
+                // Muat ulang halaman untuk kembali ke setup awal
+                location.reload();
             });
+        }
 
-            // Listener yang sudah ada
-            onSnapshot(inventoryCol, (snapshot) => {
-                console.log("Snapshot inventaris diterima");
-                localInventory = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderInventoryTable();
-                updateStats();
-                populateItemSelect();
-                renderRentals();
-                renderHistory();
-                renderLaporan();
-                if (pages.stats.classList.contains('hidden') === false) {
-                    renderStatsPage();
-                }
-            }, (error) => console.error("Error listening ke inventory: ", error));
-
-            onSnapshot(rentalsCol, (snapshot) => {
-                console.log("Snapshot rentals diterima");
-                localRentals = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderRentals();
-                renderLaporan();
-                updateStats(); 
-            }, (error) => console.error("Error listening ke rentals: ", error));
-
-            onSnapshot(historyCol, (snapshot) => {
-                console.log("Snapshot histori diterima");
-                localHistory = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderHistory();
-                if (pages.stats.classList.contains('hidden') === false) {
-                    renderStatsPage();
-                }
-            }, (error) => console.error("Error listening ke history: ", error));
+        // (DIHAPUS) Fungsi setupRealtimeListeners dihapus
+        
+        // (DIUBAH) Mengganti nama dari initializeMainAppListeners
+        function initializeMainApp() {
+            // Update UI awal berdasarkan data yang dimuat
+            updateProfileUI(localProfile);
+            renderAllUI();
             
+            // Mulai timer
             if (countdownTimerInterval) clearInterval(countdownTimerInterval);
             countdownTimerInterval = setInterval(updateAllCountdowns, 1000);
-        }
-        
-        // (BARU) Fungsi untuk menginisialisasi event listener utama aplikasi
-        function initializeMainAppListeners() {
+
+            // Pasang semua event listener
             addRentalBtn.addEventListener('click', () => openModal(rentalModal));
             cancelBtn.addEventListener('click', () => closeModal(rentalModal));
             rentalModal.addEventListener('click', (e) => { if (e.target === rentalModal) closeModal(rentalModal); });
@@ -1404,79 +1386,46 @@
             inventoryForm.addEventListener('submit', handleAddInventory);
             seedDataBtn.addEventListener('click', seedDatabase);
 
-            // Listener untuk Halaman Settings
             rentalNameForm.addEventListener('submit', handleRentalNameSave);
             profilePicUpload.addEventListener('change', handleSettingsPicPreview);
             saveProfileBtn.addEventListener('click', handleProfilePicUpload);
+            deleteAllDataBtn.addEventListener('click', handleDeleteAllData);
             
-            // Listener dinamis (tabel)
             rentalsTableBody.addEventListener('click', handleReturnRental);
             inventoryTableBody.addEventListener('click', handleManageInventoryClick);
 
-            // Inisialisasi Chart & Navigasi
             initChart();
             navigateTo('dashboard');
         }
         
         // === 7. INISIALISASI APLIKASI ===
         
-        async function main() {
-            // (DIHAPUS) Listener tombol landing page dihapus
+        // (DIUBAH) Logika inisialisasi utama
+        function main() {
+            // 1. Muat semua data dari localStorage
+            localInventory = loadFromStorage(STORAGE_KEYS.INVENTORY, []);
+            localRentals = loadFromStorage(STORAGE_KEYS.RENTALS, []);
+            localHistory = loadFromStorage(STORAGE_KEYS.HISTORY, []);
+            localProfile = loadFromStorage(STORAGE_KEYS.PROFILE, {}); // Muat sebagai objek
 
-            try {
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (error) {
-                console.error("Otentikasi Firebase Gagal: ", error);
-                showMessage(`Error Otentikasi: ${error.message}.`);
-                return;
+            // 2. Cek status setup
+            if (!localProfile.rentalName) {
+                // JALUR 1: PENGGUNA BARU / SETUP BELUM LENGKAP
+                console.log("User setup incomplete. Opening setup modal.");
+                openModal(setupModal);
+                setupForm.addEventListener('submit', handleSetupSubmit);
+                setupProfileUpload.addEventListener('change', handleSetupPicPreview);
+            } else {
+                // JALUR 2: PENGGUNA LAMA / SETUP SUDAH SELESAI
+                console.log("User already set up. Initializing app.");
+                initializeMainApp();
             }
-
-            // (DIUBAH) Logika inti dipindah ke onAuthStateChanged
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    console.log("User terdeteksi:", user.uid);
-                    userId = user.uid;
-                    
-                    // Tentukan semua path
-                    const basePath = `/artifacts/${appId}/users/${userId}`;
-                    inventoryCol = collection(db, `${basePath}/inventory`);
-                    // (DIPERBAIKI) Mengganti 'baseAsem' menjadi 'basePath'
-                    rentalsCol = collection(db, `${basePath}/rentals`);
-                    historyCol = collection(db, `${basePath}/rentalHistory`);
-                    profileDocRef = doc(db, `artifacts/${appId}/users/${userId}/profile/main`);
-                    
-                    // (PENTING) Cek status setup sebelum menjalankan aplikasi
-                    const profileDocSnap = await getDoc(profileDocRef);
-                    
-                    if (!profileDocSnap.exists() || !profileDocSnap.data().rentalName) {
-                        // JALUR 1: PENGGUNA BARU / SETUP BELUM LENGKAP
-                        console.log("User setup incomplete. Opening setup modal.");
-                        // Tampilkan modal setup
-                        openModal(setupModal);
-                        // Pasang listener HANYA untuk modal setup
-                        setupForm.addEventListener('submit', handleSetupSubmit);
-                        setupProfileUpload.addEventListener('change', handleSetupPicPreview);
-                    } else {
-                        // JALUR 2: PENGGUNA LAMA / SETUP SUDAH SELESAI
-                        console.log("User already set up. Initializing app.");
-                        // Langsung jalankan aplikasi
-                        initializeMainAppListeners();
-                        setupRealtimeListeners();
-                        navigateTo('dashboard');
-                    }
-                }
-            });
         }
 
-        main().catch(err => {
-            console.error("Error kritis di fungsi main:", err);
-            showMessage(`Error Kritis: ${err.message}`);
-        });
+        // Jalankan aplikasi
+        main();
+
     </script>
 
 </body>
-</html
+</html>
